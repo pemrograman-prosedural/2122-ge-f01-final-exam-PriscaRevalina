@@ -2,53 +2,39 @@
 #include <stdio.h>
 #include <string.h>
 
-/**
- * @brief Define the complete function definition here. Be sure to enlist the prototype of each function
- * defined here in the corresponding header file.
- *
- */
-
-Dorm create_dorm ( char *_name, unsigned short _capacity, gender_t _gender )
+void create_dorm(struct dorm_t *_dorm, char *_name, unsigned short _capacity, enum gender_t _gender)
 {
-    Dorm dorm_;
-
-    dorm_.residents_num = 0;
-    strcpy( dorm_.name, _name );
-    dorm_.capacity = _capacity;
-    dorm_.gender   = _gender;
-
-    return dorm_;
+    strcpy(_dorm->name, _name);
+    _dorm->capacity = _capacity;
+    _dorm->gender = _gender;
+    _dorm->residents_num = 0;
 }
 
-void print_dorm ( Dorm dorm_to_print )
+void print_dorm(struct dorm_t *_dorm, int count)
 {
-    printf( "%s", dorm_to_print.name );
-
-    ( dorm_to_print.gender == GENDER_MALE )?
-        printf( "|%d|male\n", dorm_to_print.capacity ):
-        printf( "|%d|female\n", dorm_to_print.capacity );
-
-    fflush( stdout );    
-}
-
-void printDormDetails ( Dorm dorm_to_print )
-{
-    printf( "%s|%d", dorm_to_print.name, dorm_to_print.capacity );
-
-    ( dorm_to_print.gender == GENDER_MALE )?
-        printf( "|male" ) : printf( "|female" );
-    
-    printf( "|%d\n", dorm_to_print.residents_num );
-
-    fflush( stdout );  
-}
-
-short findDormIdx ( char* _name, Dorm *list, int length )
-{
-    for ( short i=0; i<length; i++ ) {
-        if ( strcmp( list[i].name, _name ) == 0 )
-            return i;
+    for (int i = 0; i < count; i++)
+    {
+        if (_dorm[i].gender == GENDER_MALE)
+        {
+            printf("%s|%d|male\n", _dorm[i].name, _dorm[i].capacity);
+        }
+        else if (_dorm[i].gender == GENDER_FEMALE)
+        {
+            printf("%s|%d|female\n", _dorm[i].name, _dorm[i].capacity);
+        }
     }
-
-    return -1;
+}
+void print_dorm_detail(struct dorm_t *_dorm, int count)
+{
+    for (int i = 0; i < count; i++)
+    {
+        if (_dorm[i].gender == GENDER_MALE)
+        {
+            printf("%s|%d|male|%d\n", _dorm[i].name, _dorm[i].capacity, _dorm[i].residents_num);
+        }
+        else if (_dorm[i].gender == GENDER_FEMALE)
+        {
+            printf("%s|%d|female|%d\n", _dorm[i].name, _dorm[i].capacity, _dorm[i].residents_num);
+        }
+    }
 }

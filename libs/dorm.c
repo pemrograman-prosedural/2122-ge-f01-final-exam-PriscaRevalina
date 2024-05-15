@@ -1,40 +1,27 @@
 #include "dorm.h"
-#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
-void create_dorm(struct dorm_t *_dorm, char *_name, unsigned short _capacity, enum gender_t _gender)
+struct dorm_t create_dorm(char *input)
 {
-    strcpy(_dorm->name, _name);
-    _dorm->capacity = _capacity;
-    _dorm->gender = _gender;
-    _dorm->residents_num = 0;
+  struct dorm_t drm;
+  strcpy(drm.name, strtok(NULL, "#"));
+  drm.capacity = atoi(strtok(NULL, "#"));
+  strcpy(drm.gender, strtok(NULL, "#"));
+  drm.residents_num=0;
+  return drm;
 }
 
-void print_dorm(struct dorm_t *_dorm, int count)
+int find_dorm(char *asrama, int zdrm, struct dorm_t *drm)
 {
-    for (int i = 0; i < count; i++)
+  int find_dorm;
+  for (int m = 0; m < zdrm; m++)
+  {
+    if (strcmp(asrama, drm[m].name)==0)
     {
-        if (_dorm[i].gender == GENDER_MALE)
-        {
-            printf("%s|%d|male\n", _dorm[i].name, _dorm[i].capacity);
-        }
-        else if (_dorm[i].gender == GENDER_FEMALE)
-        {
-            printf("%s|%d|female\n", _dorm[i].name, _dorm[i].capacity);
-        }
+      find_dorm=m;
     }
-}
-void print_dorm_detail(struct dorm_t *_dorm, int count)
-{
-    for (int i = 0; i < count; i++)
-    {
-        if (_dorm[i].gender == GENDER_MALE)
-        {
-            printf("%s|%d|male|%d\n", _dorm[i].name, _dorm[i].capacity, _dorm[i].residents_num);
-        }
-        else if (_dorm[i].gender == GENDER_FEMALE)
-        {
-            printf("%s|%d|female|%d\n", _dorm[i].name, _dorm[i].capacity, _dorm[i].residents_num);
-        }
-    }
+  }
+  return find_dorm;
 }

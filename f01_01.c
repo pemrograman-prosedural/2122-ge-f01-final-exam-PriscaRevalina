@@ -68,7 +68,7 @@ int main(int _argc, char **_argv)
       assign_student(drm, mhs, nim, asrama, zstd, zdrm, find_id, find_dorm);
     }
   }
-  free(mhs);
+  free(mhs); 
   free(drm);
 
   return 0;

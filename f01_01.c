@@ -2,175 +2,74 @@
 // 12S23039 - Prisca Manurung
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include "./libs/dorm.h"
 #include "./libs/student.h"
+#include "./libs/gender.h"
 
 int main(int _argc, char **_argv)
 {
-    char input[101];
-    char *kata;
-    int student_size = 0;
-    int dorm_size = 0;
-    int stdIndex = 0;
-    int drmIndex = 0;
-    struct student_t *students = NULL;
-    struct dorm_t *dorms = NULL;
-    students = malloc(student_size * sizeof(struct student_t));
-    dorms = malloc(dorm_size * sizeof(struct dorm_t));
-    char id[10];
-    char nama[25];
-    char year[5];
-    char dormName[15];
-    int capacity = 0;
-    int xDorm = -1;
-    int xStd = -1;
-    
+  char input[75];
+  int zdrm = 0;
+  int size = 0;
+  struct dorm_t *drm = malloc(size * sizeof(struct dorm_t));
+  int zstd = 0;
+  int sizee = 0;
+  struct student_t *mhs = malloc(sizee * sizeof(struct student_t));
+  char *token;
 
-    while (14)
+  while (1 == 1)
+  {
+    fgets(input, sizeof input, stdin);
+    input[strlen(input) - 1] = '\0';
+
+    /*if (strcmp(input, "---") != 0)
     {
-        input[0] = '\0';
-        int c = 0;
-        while (1)
-        {
-            char x = getchar();
-            if (x == '\r')
-            {
-                continue;
-            }
-            if (x == '\n')
-            {
-                break;
-            }
-            input[c] = x;
-            input[++c] = '\0';
-        }
+      input[strlen(input) - 1] = '\0';
+    }*/
 
-        if (strcmp(kata, "---") == 0)
-        {
-            break;
-        }
-        else if (strcmp(kata, "student-add") == 0)
-        {
-            student_size++;
-            students = realloc(students, student_size * sizeof(struct student_t));
-            kata = strtok(NULL, "#");
-            strcpy(id, kata);
-            kata = strtok(NULL, "#");
-            strcpy(nama, kata);
-            kata = strtok(NULL, "#");
-            strcpy(year, kata);
-            kata = strtok(NULL, "#");
-            if (strcmp(kata, "male") == 0)
-            {
-                students[stdIndex] = create_student(id, nama, year, GENDER_MALE);
-            }
-            else if (strcmp(kata, "female") == 0)
-            {
-                students[stdIndex] = create_student(id, nama, year, GENDER_FEMALE);
-            }
-            stdIndex++;
-        }
-        else if (strcmp(kata, "student-print-all") == 0)
-        {
-            void (*ptf)(struct student_t * _student, int count) = NULL;
-            ptf = print_student;
-            ptf(students, stdIndex);
-        }
-        else if (strcmp(kata, "student-print-all-detail") == 0)
-        {
-            print_student_detail(students, stdIndex);
-        }
-        else if (strcmp(kata, "assign-student") == 0)
-        {
-            kata = strtok(NULL, "#");
-            strcpy(id, kata);
-            kata = strtok(NULL, "#");
-            strcpy(dormName, kata);
-            for (int i = 0; i < stdIndex; i++)
-            {
-                if (strcmp(students[i].id, id) == 0)
-                {
-                    xStd = i;
-                    break;
-                }
-            }
-
-            for (int i = 0; i < stdIndex; i++)
-            {
-                if (strcmp(dorms[i].name, dormName) == 0)
-                {
-                    xDorm = i;
-                    break;
-                }
-            }
-
-            if (xDorm != -1 && xStd != -1)
-            {
-                void (*pf)(struct student_t * _student, struct dorm_t * _dorm, char *id, char *dorm_name) = NULL;
-                pf = assign_student;
-                pf(&students[xStd], &dorms[xDorm], id, dormName);
-            }
-        }
-        else if (strcmp(kata, "dorm-add") == 0)
-        {
-            dorm_size++;
-            dorms = realloc(dorms, dorm_size * sizeof(struct dorm_t));
-            kata = strtok(NULL, "#");
-            strcpy(dormName, kata);
-            kata = strtok(NULL, "#");
-            capacity = atoi(kata);
-            kata = strtok(NULL, "#");
-            if (strcmp(kata, "male") == 0)
-            {
-                dorms[drmIndex] = create_dorm(dormName, capacity, GENDER_MALE);
-            }
-            else if (strcmp(kata, "female") == 0)
-            {
-                dorms[drmIndex] = create_dorm(dormName, capacity, GENDER_FEMALE);
-            }
-            drmIndex++;
-        }
-        else if (strcmp(input, "dorm-print-all") == 0)
-        {
-            print_dorm(dorms, drmIndex);
-        }
-        else if (strcmp(input, "dorm-print-all-detail") == 0)
-        {
-            print_dorm_detail(dorms, drmIndex);
-        }
-        else if (strcmp(kata, "student-leave") == 0)
-        {
-            kata = strtok(NULL, "#");
-            strcpy(id, kata);
-            for (int i = 0; i < stdIndex; i++)
-            {
-                if (strcmp(students[i].id, id) == 0)
-                {
-                    xStd = i;
-                    break;
-                }
-            }
-
-            for (int i = 0; i < stdIndex; i++)
-            {
-                if (strcmp(dorms[i].name, dormName) == 0)
-                {
-                    xDorm = i;
-                    break;
-                }
-            }
-
-            if (xDorm != -1 && xStd != -1)
-            {
-                void (*pf)(struct student_t * _student, struct dorm_t * _dorm) = NULL;
-                pf = student_left;
-                pf(&students[xStd], &dorms[xDorm]);
-            }
-        }
+    token = strtok(input, "#");
+    if (strcmp(token, "---") == 0)
+    {
+      break;
     }
-    free(students);
-    free(dorms);
-    return 0;
+    else if (strcmp(token, "dorm-add") == 0)
+    {
+      size++;
+      drm = realloc(drm, size * sizeof(struct dorm_t));
+      drm[zdrm] = create_dorm(input);
+      zdrm++;
+    }
+    else if (strcmp(token, "student-add") == 0)
+    {
+      sizee++;
+      mhs = realloc(mhs, sizee * sizeof(struct student_t));
+      mhs[zstd] = create_student(input);
+      zstd++;
+    }
+    else if (strcmp(token, "student-print-all-detail") == 0)
+    {
+      for (int m = 0; m < zstd; m++)
+      {
+        print_student_detail(mhs[m]);
+      }
+    }
+    else if (strcmp(token, "student-leave") == 0)
+    {
+      char *nim = strtok(NULL, "#");
+      char *asrama = "left";
+      leave_student(drm, mhs, nim, asrama, zstd, zdrm, find_id, find_dorm);
+    }
+    else if (strcmp(token, "assign-student") == 0)
+    {
+      char *nim = strtok(NULL, "#");
+      char *asrama = strtok(NULL, "#");
+      assign_student(drm, mhs, nim, asrama, zstd, zdrm, find_id, find_dorm);
+    }
+  }
+  free(mhs);
+  free(drm);
+
+  return 0;
 }

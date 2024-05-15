@@ -10,25 +10,25 @@
 
 int main(int _argc, char **_argv)
 {
- char input[100];
- int zdrm = 0;
- int size = 0;
- struct dorm_t *drm = malloc(size *sizeof(struct dorm_t));
- int zstd = 0;
- int sizee = 0;
- struct student_t *mhs = malloc(sizee *sizeof(struct student_t));
- char *token;
+  char input[75];
+  int zdrm = 0;
+  int size = 0;
+  struct dorm_t *drm = malloc(size * sizeof(struct dorm_t));
+  int zstd = 0;
+  int sizee = 0;
+  struct student_t *mhs = malloc(sizee * sizeof(struct student_t));
+  char *token;
 
- while (1 == 1)
- {
+  while (1 == 1)
+  {
     fgets(input, sizeof input, stdin);
     input[strlen(input) - 1] = '\0';
 
     /*if (strcmp(input, "---") != 0)
     {
-        input[strlen(input) - 1] = '\0'
+      input[strlen(input) - 1] = '\0';
     }*/
- 
+
     token = strtok(input, "#");
     if (strcmp(token, "---") == 0)
     {

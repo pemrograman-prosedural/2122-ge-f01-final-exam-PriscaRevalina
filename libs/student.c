@@ -1,56 +1,89 @@
 #include "student.h"
-#include "dorm.h"
-#include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-struct student_t create_student(char *input)
+struct student_t create_student(char *_id, char *_name, char *_year, enum gender_t _gender)
 {
-  struct student_t mhs;
-  strcpy(mhs.nim, strtok(NULL, "#"));
-  strcpy(mhs.name, strtok(NULL, "#"));
-  strcpy(mhs.year, strtok(NULL, "#"));
-  strcpy(mhs.gender, strtok(NULL, "#"));
-  strcpy(mhs.dormname, "unassigned");
-
-  return mhs;
+    struct student_t s;
+    strcpy(s.id, _id);
+    strcpy(s.name, _name);
+    strcpy(s.year, _year);
+    s.gender = _gender;
+    s.dorm = malloc(sizeof(struct dorm_t));
+    strcpy(s.dorm->name, "unassigned");
+    return s;
 }
-
-void print_student_detail(struct student_t mhs)
+void print_student(struct student_t *_student, int count)
 {
-  printf("%s|%s|%s|%s|%s\n", mhs.nim, mhs.name, mhs.year, mhs.gender, mhs.dormname);
-}
-
-int find_id(char *nim, int zstd, struct student_t *mhs)
-{
-  int find_id;
-  for (int m = 0; m < zstd; m++)
-  {
-    if (strcmp(nim, mhs[m].nim) == 0)
+    for (int i = 0; i < count; i++)
     {
-      find_id = m;
+        if (_student[i].gender == GENDER_MALE)
+        {
+            printf("%s|%s|%s|male\n", _student[i].id, _student[i].name, _student[i].year);
+        }
+        else if (_student[i].gender == GENDER_FEMALE)
+        {
+            printf("%s|%s|%s|female\n", _student[i].id, _student[i].name, _student[i].year);
+        }
     }
-  }
-  return find_id;
 }
-
-void leave_student(struct dorm_t *drm, struct student_t *mhs, char *nim, char *asrama, int zstd, int zdrm, int find_id(char *nim, int zstd, struct student_t *mhs), int find_dorm(char *asra, int zdrm, struct dorm_t *drm))
+void print_student_detail(struct student_t *_student, int count)
 {
-  int maha = find_id(nim, zstd, mhs);
-  asrama = mhs[maha].dormname;
-  int asra = find_dorm(asrama, zdrm, drm);
-  drm[asra].residents_num--;
-  strcpy(mhs[maha].dormname, "left");
+    for (int i = 0; i < count; i++)
+    {
+        if (_student[i].dorm == NULL)
+        {
+            if (_student[i].gender == GENDER_MALE)
+            {
+                printf("%s|%s|%s|male|left\n", _student[i].id, _student[i].name, _student[i].year);
+            }
+            else if (_student[i].gender == GENDER_FEMALE)
+            {
+                printf("%s|%s|%s|female|left\n", _student[i].id, _student[i].name, _student[i].year);
+            }
+        }
+        else
+        {
+            if (_student[i].gender == GENDER_MALE)
+            {
+                printf("%s|%s|%s|male|%s\n", _student[i].id, _student[i].name, _student[i].year, _student[i].dorm->name);
+            }
+            else if (_student[i].gender == GENDER_FEMALE)
+            {
+                printf("%s|%s|%s|female|%s\n", _student[i].id, _student[i].name, _student[i].year, _student[i].dorm->name);
+            }
+        }
+    }
 }
-
-
-void assign_student(struct dorm_t *drm, struct student_t *mhs, char *nim, char *asrama, int zstd, int zdrm, int find_id(char *nim, int zstd, struct student_t *mhs), int find_dorm(char *asrama, int zdrm, struct dorm_t *drm))
+void assign_student(struct student_t *_student, struct dorm_t *_dorm)
 {
-  int maha = find_id(nim, zstd, mhs);
-  int asra = find_dorm(asrama, zdrm, drm);
-  if (maha >= 0 && asra >= 0 && drm[asra].capacity != drm[asra].residents_num && strcmp(mhs[maha].gender, drm[asra].gender) == 0)
-  {
-    strcpy(mhs[maha].dormname, asrama);
-    drm[asra].residents_num++;
-  }
+    if (_dorm->residents_num < _dorm->capacity)
+    {
+        if (_student->gender == _dorm->gender)
+        {
+            _student->dorm = _dorm;
+            _dorm->residents_num++;
+        }
+    }
+}
+void move_student(struct student_t *_student, struct dorm_t *_dorm, struct dorm_t *old_dorm)
+{
+    if (_dorm->residents_num < _dorm->capacity)
+    {
+        if (_student->gender == _dorm->gender)
+        {
+            _student->dorm = _dorm;
+            _dorm->residents_num++;
+            old_dorm->residents_num--;
+        }
+    }
+}
+void leave_student(struct student_t *_student, struct dorm_t *_dorm)
+{
+    if (_student->dorm != NULL)
+    {
+        _dorm->residents_num--;
+        _student->dorm = NULL;
+    }
 }

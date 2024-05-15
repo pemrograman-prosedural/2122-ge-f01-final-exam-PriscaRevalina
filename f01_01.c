@@ -2,107 +2,74 @@
 // 12S23039 - Prisca Manurung
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include "./libs/dorm.h"
 #include "./libs/student.h"
+#include "./libs/gender.h"
 
-typedef void (*CommandFunc)(char *, struct student_t **, int *, struct dorm_t **, int *);
+int main(int _argc, char **_argv)
+{
+ char input[100];
+ int zdrm = 0;
+ int size = 0;
+ struct dorm_t *drm = malloc(size *sizeof(struct dorm_t));
+ int zstd = 0;
+ int sizee = 0;
+ struct student_t *mhs = malloc(sizee *sizeof(struct student_t));
+ char *token;
 
-typedef struct {
-    char *name;
-    CommandFunc func;
-} Command;
+ while (1 == 1)
+ {
+    fgets(input, sizeof input, stdin);
+    input[strlen(input) - 1] = '\0';
 
-void dorm_add(char *input, struct student_t **mhs, int *size, struct dorm_t **dorm, int *size2) {
-    (*size2)++;
-    *dorm = realloc(*dorm, *size2 * sizeof(struct dorm_t));
-    (*dorm)[*size2 - 1] = create_dorm(input);
-}
-
-void dorm_print_all(char *input, struct student_t **mhs, int *size, struct dorm_t **dorm, int *size2) {
-    for(int i = 0; i < *size2; i++) {
-        print_dorm((*dorm)[i]);
+    /*if (strcmp(input, "---") != 0)
+    {
+        input[strlen(input) - 1] = '\0'
+    }*/
+ 
+    token = strtok(input, "#");
+    if (strcmp(token, "---") == 0)
+    {
+      break;
     }
-}
-
-void student_add(char *input, struct student_t **mhs, int *size, struct dorm_t **dorm, int *size2) {
-    (*size)++;
-    *mhs = realloc(*mhs, *size * sizeof(struct student_t));
-    (*mhs)[*size - 1] = create_student(input);
-}
-
-void student_print_all(char *input, struct student_t **mhs, int *size, struct dorm_t **dorm, int *size2) {
-    for(int i = 0; i < *size; i++) {
-        print_student((*mhs)[i]);
-
-        // Check if student is assigned to a dorm
-        int assigned = 0;
-        for(int j = 0; j < *size2; j++) {
-            if ((*mhs)[i].dorm != NULL && strcmp((*mhs)[i].dorm->name, (*dorm)[j].name) == 0) {
-                assigned = 1;
-                break;
-            }
-        }
-        if (!assigned) {
-            printf("|unassigned\n");
-        } else {
-            printf("\n");
-        }
+    else if (strcmp(token, "dorm-add") == 0)
+    {
+      size++;
+      drm = realloc(drm, size * sizeof(struct dorm_t));
+      drm[zdrm] = create_dorm(input);
+      zdrm++;
     }
-}
-
-int main(int _argc, char **_argv) {
-    char input[100];
-    int size = 0;
-    char *token;
-    struct student_t *mhs = NULL;
-    int size2 = 0;
-    struct dorm_t *dorm = NULL;
-
-    Command commands[] = {
-        {"dorm-add", dorm_add},
-        {"dorm-print-all", dorm_print_all},
-        {"student-add", student_add},
-        {"student-print-all", student_print_all},
-        {NULL, NULL}  // End marker
-    };
-
-    while(1) {
-        fgets(input, sizeof input, stdin);
-        if(input[strlen(input) - 1] == '\n' || input[strlen(input) - 1] == '\r') {
-            input[strlen(input) - 1] = '\0';
-        }
-
-        token = strtok(input, "#");
-        if(strcmp(token, "---") == 0) {
-            break;
-        }
-
-        for(Command *cmd = commands; cmd->name != NULL; cmd++) {
-            if(strcmp(token, cmd->name) == 0) {
-                cmd->func(input, &mhs, &size, &dorm, &size2);
-                break;
-            }
-        }
+    else if (strcmp(token, "student-add") == 0)
+    {
+      sizee++;
+      mhs = realloc(mhs, sizee * sizeof(struct student_t));
+      mhs[zstd] = create_student(input);
+      zstd++;
     }
-
-    // Free allocated memory
-    for (int i = 0; i < size; i++) {
-        if (mhs[i].name != NULL) {
-            free(mhs[i].name);
-        }
-        if (mhs[i].id != NULL) {
-            free(mhs[i].id);
-        }
-        if (mhs[i].dorm != NULL) {
-            if (mhs[i].dorm->name != NULL) {
-                free(mhs[i].dorm->name);
-            }
-            free(mhs[i].dorm);
-        }
+    else if (strcmp(token, "student-print-all-detail") == 0)
+    {
+      for (int m = 0; m < zstd; m++)
+      {
+        print_student_detail(mhs[m]);
+      }
     }
-    free(mhs);
-    free(dorm);
-    return 0;
+    else if (strcmp(token, "student-leave") == 0)
+    {
+      char *nim = strtok(NULL, "#");
+      char *asrama = "left";
+      leave_student(drm, mhs, nim, asrama, zstd, zdrm, find_id, find_dorm);
+    }
+    else if (strcmp(token, "assign-student") == 0)
+    {
+      char *nim = strtok(NULL, "#");
+      char *asrama = strtok(NULL, "#");
+      assign_student(drm, mhs, nim, asrama, zstd, zdrm, find_id, find_dorm);
+    }
+  }
+  free(mhs);
+  free(drm);
+
+  return 0;
 }
